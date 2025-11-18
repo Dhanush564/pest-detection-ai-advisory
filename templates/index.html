@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pest Detection & AI Advisory</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <h1>AI Pest Detection & Advisory Platform</h1>
+
+    <!-- Upload Image Form -->
+    <h2>Upload Pest Image</h2>
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <input type="submit" value="Predict">
+    </form>
+
+    {% if prediction %}
+        <h3>Predicted Pest: {{ prediction }}</h3>
+        <h4>Advisory: {{ advice }}</h4>
+        <img src="{{ url_for('static', filename=request.files['file'].filename) }}" width="300">
+    {% endif %}
+
+    <!-- Gemini AI Chatbot Form -->
+    <h2>Ask AI Chatbot</h2>
+    <form method="POST">
+        <input type="text" name="chat_input" placeholder="Ask anything about pests or crops">
+        <input type="submit" value="Ask">
+    </form>
+
+    {% if gpt_response %}
+        <h4>Chatbot Response:</h4>
+        <p>{{ gpt_response }}</p>
+    {% endif %}
+</body>
+</html>
