@@ -14,7 +14,7 @@ app = Flask(__name__)
 # ---------------------------
 # 2. Google Gemini API Key
 # ---------------------------
-genai.configure(api_key="xxx") # use your api instead of x
+genai.configure(api_key="AIzaSyBH0Zf1GJaPGqfub3_2cg0zX85T_u-awLo") # use your api instead of x
 
 model_gemini = genai.GenerativeModel("models/gemini-2.5-flash")
 
@@ -77,8 +77,28 @@ def predict_pest(image_path):
 # ---------------------------
 def ask_gemini(question):
     try:
-        response = model_gemini.generate_content(question)
-        return response.text
+        prompt = f"""
+You are an agricultural expert.
+
+Answer the following question in a clean, well-structured format:
+- Use numbered steps
+- Use short bullet points
+- Use simple language suitable for farmers
+- Avoid long paragraphs
+- Add emojis where helpful
+Rules:
+- Do NOT use markdown
+- Do NOT use ** or *
+- Use simple numbered steps
+- Each point on a new line
+
+Question:
+{question}
+"""
+
+        response = model_gemini.generate_content(prompt)
+        return response.text.replace("**", "")
+
     except Exception as e:
         return f"Error: {str(e)}"
 

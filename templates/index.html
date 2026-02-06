@@ -1,36 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Pest Detection & AI Advisory</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <title>Pest Detection AI Advisory</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-
 <body>
-    <h1>AI Pest Detection & Advisory Platform</h1>
 
-    <!-- Upload Image Form -->
-    <h2>Upload Pest Image</h2>
-    <form method="POST" enctype="multipart/form-data">
-        <input type="file" name="file">
-        <input type="submit" value="Predict">
-    </form>
+<div class="background"></div>
 
-    {% if prediction %}
-        <h3>Predicted Pest: {{ prediction }}</h3>
-        <h4>Advisory: {{ advice }}</h4>
-        <img src="{{ url_for('static', filename=request.files['file'].filename) }}" width="300">
-    {% endif %}
+<div class="container">
+    <h1>🌾 Pest Detection & AI Advisory</h1>
+    <p class="subtitle">Smart agriculture powered by Artificial Intelligence</p>
 
-    <!-- Gemini AI Chatbot Form -->
-    <h2>Ask AI Chatbot</h2>
-    <form method="POST">
-        <input type="text" name="chat_input" placeholder="Ask anything about pests or crops">
-        <input type="submit" value="Ask">
-    </form>
+    <div class="card">
+        <h2>📷 Upload Pest Image</h2>
 
-    {% if gpt_response %}
-        <h4>Chatbot Response:</h4>
-        <p>{{ gpt_response }}</p>
-    {% endif %}
+        <form method="POST" enctype="multipart/form-data">
+            <label class="file-upload">
+                <input type="file" name="file" accept="image/*" onchange="previewImage(event)" required>
+                <span>📁 Choose Pest Image</span>
+            </label>
+
+            <img id="preview">
+
+            <button type="submit" class="primary-btn">Detect Pest</button>
+        </form>
+
+        {% if prediction and image_name %}
+        <div class="result">
+            <h3>🪲 Pest Detected: {{ prediction }}</h3>
+            <p>{{ advice }}</p>
+            <img src="{{ url_for('static', filename=image_name) }}">
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <h2>🤖 AI Advisory Chat</h2>
+
+        <form method="POST">
+            <input type="text" name="chat_input"
+                   placeholder="Ask about pest control, crop safety, fertilizers..."
+                   required>
+
+            <button type="submit" class="secondary-btn">Ask AI</button>
+        </form>
+
+        {% if gpt_response %}
+        <div class="chat">
+            <strong>AI Response</strong>
+            <pre class="ai-text">{{ gpt_response }}</pre>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function previewImage(event) {
+    const img = document.getElementById("preview");
+    img.src = URL.createObjectURL(event.target.files[0]);
+    img.style.display = "block";
+}
+</script>
+
 </body>
 </html>

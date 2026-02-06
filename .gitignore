@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.env
+venv/
+model/*.pth
+static/*.jpg
+static/*.png
