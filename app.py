@@ -110,22 +110,30 @@ def home():
     prediction = None
     advice = None
     gpt_response = None
+    image_name = None   # ✅ ADD THIS
 
     if request.method == "POST":
-        # Image upload prediction
-        if "file" in request.files:
-            file = request.files["file"]
-            if file.filename != "":
-                file_path = os.path.join("static", file.filename)
-                file.save(file_path)
-                prediction, advice = predict_pest(file_path)
-        
-        # Gemini chatbot query
-        if "chat_input" in request.form:
-            user_question = request.form["chat_input"]
-            gpt_response = ask_gemini(user_question)
 
-    return render_template("index.html", prediction=prediction, advice=advice, gpt_response=gpt_response)
+        # ---------- IMAGE PREDICTION ----------
+        if "file" in request.files and request.files["file"].filename != "":
+            file = request.files["file"]
+            image_name = file.filename
+            file_path = os.path.join("static", image_name)
+            file.save(file_path)
+
+            prediction, advice = predict_pest(file_path)
+
+        # ---------- AI CHAT ----------
+        if "chat_input" in request.form and request.form["chat_input"].strip() != "":
+            gpt_response = ask_gemini(request.form["chat_input"])
+
+    return render_template(
+        "index.html",
+        prediction=prediction,
+        advice=advice,
+        gpt_response=gpt_response,
+        image_name=image_name
+    )
 
 # ---------------------------
 # 10. Run Server

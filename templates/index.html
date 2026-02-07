@@ -27,13 +27,17 @@
             <button type="submit" class="primary-btn">Detect Pest</button>
         </form>
 
-        {% if prediction and image_name %}
-        <div class="result">
-            <h3>🪲 Pest Detected: {{ prediction }}</h3>
-            <p>{{ advice }}</p>
-            <img src="{{ url_for('static', filename=image_name) }}">
-        </div>
-        {% endif %}
+ {% if prediction %}
+<div class="result-box">
+    <h3>🪲 Detected Pest: {{ prediction }}</h3>
+    <p><strong>Advisory:</strong> {{ advice }}</p>
+
+    {% if image_name %}
+        <img src="{{ url_for('static', filename=image_name) }}" width="300">
+    {% endif %}
+</div>
+{% endif %}
+
     </div>
 
     <div class="card">
